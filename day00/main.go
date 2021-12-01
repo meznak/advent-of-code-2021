@@ -39,7 +39,7 @@ func SolvePart2(input []int) int {
 }
 
 func main() {
-	input := shared.ReadInputInts("./input")
+	input := shared.ReadInputInts("day00/input")
 
 	fmt.Printf("Part 1: %v\n", SolvePart1(input))
 	fmt.Printf("Part 2: %v\n", SolvePart2(input))
