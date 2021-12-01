@@ -12,21 +12,14 @@ import (
 
 // Count depth increases
 func SolvePart1(input []int) int {
-	var prev_depth, increases int
+	var increases int
+	ch := make(chan int)
 
-	for i, depth := range input {
-		// First measurement can't be deeper
-		if i == 0 {
-			prev_depth = depth
-			continue
-		}
-
-		if depth > prev_depth {
-			increases++
-		}
-
-		prev_depth = depth
+	for i := range input {
+		go ComparePrevious(input, i, ch)
+		increases += <-ch
 	}
+	close(ch)
 
 	return increases
 }
@@ -35,6 +28,18 @@ func SolvePart1(input []int) int {
 func SolvePart2(input []int) int {
 	sums := SumWindows(input)
 	return SolvePart1(sums)
+}
+
+func ComparePrevious(input []int, i int, ch chan int) {
+	if i == 0 {
+		ch <- 0
+	} else {
+		if input[i] > input[i-1] {
+			ch <- 1
+		} else {
+			ch <- 0
+		}
+	}
 }
 
 // Sum a three-measurement rolling window
