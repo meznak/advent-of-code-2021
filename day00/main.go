@@ -15,7 +15,7 @@ func SolvePart1(input []int) int {
 	for i, a := range input {
 		for _, b := range input[i:] {
 			if a+b == 2020 {
-				return a + b
+				return a * b
 			}
 		}
 	}
@@ -29,7 +29,7 @@ func SolvePart2(input []int) int {
 		for j, b := range input[i:] {
 			for _, c := range input[j:] {
 				if a+b+c == 2020 {
-					return a + b
+					return a * b * c
 				}
 			}
 		}
@@ -39,7 +39,7 @@ func SolvePart2(input []int) int {
 }
 
 func main() {
-	input := shared.ParseInputInts(shared.ReadInputLines("./input"))
+	input := shared.ReadInputInts("./input")
 
 	fmt.Printf("Part 1: %v\n", SolvePart1(input))
 	fmt.Printf("Part 2: %v\n", SolvePart2(input))
