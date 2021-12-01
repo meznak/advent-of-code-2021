@@ -16,11 +16,21 @@ func Test_SolvePart1(t *testing.T) {
 	}
 }
 func Test_SolvePart2(t *testing.T) {
-	want := -1
+	want := 5
 
 	input := shared.ParseInputInts(shared.ReadInputLines("sample1"))
 
 	if got := SolvePart2(input); !reflect.DeepEqual(got, want) {
+		t.Errorf("ReadInput() = %v, want %v", got, want)
+	}
+}
+
+func Test_SumWindows(t *testing.T) {
+	want := []int{607, 618, 618, 617, 647, 716, 769, 792}
+
+	input := shared.ParseInputInts(shared.ReadInputLines("sample1"))
+
+	if got := SumWindows(input); !reflect.DeepEqual(got, want) {
 		t.Errorf("ReadInput() = %v, want %v", got, want)
 	}
 }
