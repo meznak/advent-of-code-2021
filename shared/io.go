@@ -23,7 +23,8 @@ func ReadInputLines(fname string) []string {
 	return lines
 }
 
-func ParseInputInts(lines []string) []int {
+func ReadInputInts(fname string) []int {
+	lines := ReadInputLines(fname)
 	ints := make([]int, len(lines))
 	var err error
 
