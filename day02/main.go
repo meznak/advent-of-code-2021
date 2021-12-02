@@ -12,25 +12,26 @@ import (
 	"strings"
 )
 
+type instruction struct {
+	direction byte // first character
+	distance  int
+}
+
 // Calculate horizontal position & depth
 func SolvePart1(input []string) int {
 	var x, z int
 
-	for _, line := range input {
-		instruction := strings.Split(line, " ")
-		distance, err := strconv.Atoi(instruction[1])
+	instructions := ParseInstructions(&input)
 
-		if err != nil {
-			panic(err)
-		}
+	for _, inst := range instructions {
 
-		switch instruction[0] {
-		case "forward":
-			x += distance
-		case "down":
-			z += distance
-		case "up":
-			z -= distance
+		switch inst.direction {
+		case 'f': // forward
+			x += inst.distance
+		case 'd': // down
+			z += inst.distance
+		case 'u': // up
+			z -= inst.distance
 		}
 	}
 
@@ -42,28 +43,41 @@ func SolvePart1(input []string) int {
 func SolvePart2(input []string) int {
 	var x, z, aim int
 
-	for _, line := range input {
-		instruction := strings.Split(line, " ")
-		distance, err := strconv.Atoi(instruction[1])
+	instructions := ParseInstructions(&input)
 
-		if err != nil {
-			panic(err)
-		}
+	for _, inst := range instructions {
 
-		switch instruction[0] {
-		case "forward":
-			x += distance
-			z += distance * aim
-		case "down":
-			aim += distance
-		case "up":
-			aim -= distance
+		switch inst.direction {
+		case 'f':
+			x += inst.distance
+			z += inst.distance * aim
+		case 'd':
+			aim += inst.distance
+		case 'u':
+			aim -= inst.distance
 		}
 	}
 
 	// Return horizontal * depth
 	return x * z
-	return -1
+}
+
+func ParseInstructions(input *[]string) []instruction {
+	out := make([]instruction, len(*input))
+
+	for i, line := range *input {
+		line_split := strings.Split(line, " ")
+		distance, err := strconv.Atoi(line_split[1])
+
+		if err != nil {
+			panic(err)
+		}
+
+		out[i] = instruction{line_split[0][0], distance}
+
+	}
+
+	return out
 }
 
 func main() {
