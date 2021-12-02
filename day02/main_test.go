@@ -16,7 +16,7 @@ func Test_SolvePart1(t *testing.T) {
 	}
 }
 func Test_SolvePart2(t *testing.T) {
-	want := -1
+	want := 900
 
 	input := shared.ReadInputLines("sample1")
 

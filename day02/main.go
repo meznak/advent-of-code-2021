@@ -40,7 +40,29 @@ func SolvePart1(input []string) int {
 
 // Find triples that add to 2020
 func SolvePart2(input []string) int {
+	var x, z, aim int
 
+	for _, line := range input {
+		instruction := strings.Split(line, " ")
+		distance, err := strconv.Atoi(instruction[1])
+
+		if err != nil {
+			panic(err)
+		}
+
+		switch instruction[0] {
+		case "forward":
+			x += distance
+			z += distance * aim
+		case "down":
+			aim += distance
+		case "up":
+			aim -= distance
+		}
+	}
+
+	// Return horizontal * depth
+	return x * z
 	return -1
 }
 
