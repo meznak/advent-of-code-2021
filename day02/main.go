@@ -66,14 +66,14 @@ func ParseInstructions(input *[]string) []instruction {
 	out := make([]instruction, len(*input))
 
 	for i, line := range *input {
-		line_split := strings.Split(line, " ")
-		distance, err := strconv.Atoi(line_split[1])
+		direction := line[0]
+		distance, err := strconv.Atoi(line[strings.LastIndex(line, " ")+1:])
 
 		if err != nil {
 			panic(err)
 		}
 
-		out[i] = instruction{line_split[0][0], distance}
+		out[i] = instruction{direction, distance}
 
 	}
 
