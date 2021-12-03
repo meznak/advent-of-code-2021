@@ -51,6 +51,16 @@ func Test_MostCommonBits(t *testing.T) {
 	}
 }
 
+func Test_FlipBits(t *testing.T) {
+	want := "10110"
+
+	input := "01001"
+
+	if got := FlipBits(input); !reflect.DeepEqual(got, want) {
+		t.Errorf("FlipBits() = %T(%v), want %T(%v)", got, got, want, want)
+	}
+}
+
 func Benchmark_SolvePart1(b *testing.B) {
 	input := shared.ReadInputLines("input")
 
