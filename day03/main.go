@@ -13,31 +13,11 @@ import (
 
 // Convert binary to "gamma" and "epsilon" numbers
 func SolvePart1(input []string) int {
-	length := len(input[0])
-	var g, e string
+	mcb := MostCommonBits(input)
+	lcb := FlipBits(mcb)
 
-	for i_bit := 0; i_bit < length; i_bit++ {
-		var ones, zeros int
-
-		for _, byte := range input {
-			if byte[i_bit] == '1' {
-				ones++
-			} else {
-				zeros++
-			}
-		}
-
-		if ones > zeros {
-			g += "1"
-			e += "0"
-		} else {
-			g += "0"
-			e += "1"
-		}
-	}
-
-	g_i, _ := strconv.ParseUint(g, 2, 64)
-	e_i, _ := strconv.ParseUint(e, 2, 64)
+	g_i, _ := strconv.ParseUint(mcb, 2, 64)
+	e_i, _ := strconv.ParseUint(lcb, 2, 64)
 
 	return int(g_i * e_i)
 }
@@ -109,6 +89,18 @@ func MostCommonBits(input []string) (out string) {
 
 	for i_bit := 0; i_bit < length; i_bit++ {
 		out += string(MostCommonBit(input, i_bit))
+	}
+
+	return
+}
+
+func FlipBits(input string) (out string) {
+	for _, v := range input {
+		if v == '0' {
+			out += "1"
+		} else {
+			out += "0"
+		}
 	}
 
 	return
