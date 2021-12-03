@@ -44,8 +44,74 @@ func SolvePart1(input []string) int {
 
 //
 func SolvePart2(input []string) int {
+	var mcb byte
+	oxy := make([]string, len(input))
+	co2 := make([]string, len(input))
 
-	return -1
+	copy(oxy, input)
+	for i := range input[0] {
+		mcb = MostCommonBit(oxy, i)
+
+		for j := len(oxy) - 1; j >= 0; j-- {
+			if oxy[j][i] != mcb {
+				oxy[j] = oxy[len(oxy)-1]
+				oxy = oxy[:len(oxy)-1]
+			}
+		}
+
+		if len(oxy) == 1 {
+			break
+		}
+	}
+
+	copy(co2, input)
+	for i := range input[0] {
+		mcb := MostCommonBit(co2, i)
+
+		for j := len(co2) - 1; j >= 0; j-- {
+			if co2[j][i] == mcb {
+				co2[j] = co2[len(co2)-1]
+				co2 = co2[:len(co2)-1]
+			}
+		}
+
+		if len(co2) == 1 {
+			break
+		}
+	}
+
+	oxy_i, _ := strconv.ParseUint(oxy[0], 2, 64)
+	co2_i, _ := strconv.ParseUint(co2[0], 2, 64)
+
+	return int(oxy_i * co2_i)
+}
+
+func MostCommonBit(input []string, i_bit int) byte {
+	count := 0
+
+	for _, line := range input {
+		if line[i_bit] == '1' {
+			count++
+		} else {
+			count--
+		}
+	}
+
+	if count >= 0 {
+		return '1'
+	} else {
+		return '0'
+	}
+}
+
+func MostCommonBits(input []string) (out string) {
+	length := len(input[0])
+
+	for i_bit := 0; i_bit < length; i_bit++ {
+		out += string(MostCommonBit(input, i_bit))
+	}
+
+	return
 }
 
 func main() {
