@@ -8,6 +8,7 @@ package main
 import (
 	"aoc2021/shared"
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -100,6 +101,19 @@ func CheckBoards(board_state *[][5][5]bool) int {
 	}
 
 	return -1
+}
+
+func ScoreBoard(board *[5][5]string, board_state *[5][5]bool) (score int) {
+	for i, row := range *board_state {
+		for j, state := range row {
+			if !state {
+				number, _ := strconv.Atoi((*board)[i][j])
+				score += number
+			}
+		}
+	}
+
+	return
 }
 
 func main() {
