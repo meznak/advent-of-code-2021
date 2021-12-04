@@ -17,7 +17,7 @@ func Test_SolvePart1(t *testing.T) {
 }
 
 func Test_SolvePart2(t *testing.T) {
-	want := -1
+	want := 1924
 
 	input := shared.ReadInputLines("sample1")
 
@@ -165,7 +165,7 @@ func Test_CheckBoards_col(t *testing.T) {
 
 func Test_ScoreBoard(t *testing.T) {
 	want := 188
-	board := [5][5]string{
+	board := [][]string{
 		{"14", "21", "17", "24", "4"},
 		{"10", "16", "15", "9", "19"},
 		{"18", "8", "23", "26", "20"},
