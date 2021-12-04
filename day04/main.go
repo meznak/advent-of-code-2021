@@ -13,19 +13,24 @@ import (
 
 // Convert binary to "gamma" and "epsilon" numbers
 func SolvePart1(input []string) int {
+	var winner int
 
 	numbers := ParseNumbers(input[0])
 	boards := ParseBoards(input[2:])
 
 	board_state := make([][5][5]bool, len(boards))
-	for i := range board_state {
+	/* 	for i := range board_state {
 		for j := 0; j < 5; j++ {
 			board_state[i][j] = [5]bool{false, false, false, false, false}
 		}
-	}
+	} */
 
 	for _, number := range numbers {
-		CheckBoards(number, &boards, &board_state)
+		MarkBoards(number, &boards, &board_state)
+		winner = CheckBoards(&board_state)
+		if winner > -1 {
+			break
+		}
 	}
 
 	return -1
@@ -59,7 +64,7 @@ func ParseBoards(input []string) (output [][][]string) {
 	return
 }
 
-func CheckBoards(number string, boards *[][][]string, board_state *[][5][5]bool) {
+func MarkBoards(number string, boards *[][][]string, board_state *[][5][5]bool) {
 	for i, board := range *boards {
 		for j := range board {
 			for k := range board[0] {
@@ -71,8 +76,35 @@ func CheckBoards(number string, boards *[][][]string, board_state *[][5][5]bool)
 	}
 }
 
+func CheckBoards(board_state *[][5][5]bool) int {
+	for i, board := range *board_state {
+		// Check rows
+		for _, row := range board {
+			if row == [5]bool{true, true, true, true, true} {
+				return i
+			}
+		}
+
+		// Check cols
+		for col := range board[0] {
+			for row := range board {
+				if board[row][col] == false {
+					break
+				}
+
+				if row == 4 {
+					return i
+				}
+			}
+		}
+	}
+
+	return -1
+}
+
 func main() {
 	input := shared.ReadInputLines("day03/input")
+	input = append(input, fmt.Sprintf("\n"))
 
 	fmt.Printf("Part 1: %v\n", SolvePart1(input))
 	fmt.Printf("Part 2: %v\n", SolvePart2(input))
