@@ -100,6 +100,7 @@ func Test_MarkBoards(t *testing.T) {
 		t.Errorf("MarkBoards() = %T(%v), want %T(%v)", got, got, want, want)
 	}
 }
+
 func Test_CheckBoards_row(t *testing.T) {
 	want := 1
 	input := [][5][5]bool{
@@ -130,6 +131,7 @@ func Test_CheckBoards_row(t *testing.T) {
 		t.Errorf("CheckBoards() = %T(%v), want %T(%v)", got, got, want, want)
 	}
 }
+
 func Test_CheckBoards_col(t *testing.T) {
 	want := 0
 	input := [][5][5]bool{
@@ -158,6 +160,28 @@ func Test_CheckBoards_col(t *testing.T) {
 
 	if got := CheckBoards(&input); !reflect.DeepEqual(got, want) {
 		t.Errorf("CheckBoards() = %T(%v), want %T(%v)", got, got, want, want)
+	}
+}
+
+func Test_ScoreBoard(t *testing.T) {
+	want := 188
+	board := [5][5]string{
+		{"14", "21", "17", "24", "4"},
+		{"10", "16", "15", "9", "19"},
+		{"18", "8", "23", "26", "20"},
+		{"22", "11", "13", "6", "5"},
+		{"2", "0", "12", "3", "7"},
+	}
+	board_state := [5][5]bool{
+		{true, true, true, true, true},
+		{false, false, false, true, false},
+		{false, false, true, false, false},
+		{false, true, false, false, true},
+		{true, true, false, false, true},
+	}
+
+	if got := ScoreBoard(&board, &board_state); !reflect.DeepEqual(got, want) {
+		t.Errorf("ScoreBoard() = %T(%v), want %T(%v)", got, got, want, want)
 	}
 }
 
