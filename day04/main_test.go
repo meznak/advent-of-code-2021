@@ -7,7 +7,7 @@ import (
 )
 
 func Test_SolvePart1(t *testing.T) {
-	want := -1
+	want := 4512
 
 	input := shared.ReadInputLines("sample1")
 
@@ -68,7 +68,7 @@ func Test_ParseBoards(t *testing.T) {
 	}
 }
 
-func Test_CheckBoards(t *testing.T) {
+func Test_MarkBoards(t *testing.T) {
 	want := [][5][5]bool{
 		{
 			{false, true, false, false, false},
@@ -96,7 +96,67 @@ func Test_CheckBoards(t *testing.T) {
 	input := ParseBoards(shared.ReadInputLines("sample1")[2:])
 	got := make([][5][5]bool, len(input))
 
-	if CheckBoards("13", &input, &got); !reflect.DeepEqual(got, want) {
+	if MarkBoards("13", &input, &got); !reflect.DeepEqual(got, want) {
+		t.Errorf("MarkBoards() = %T(%v), want %T(%v)", got, got, want, want)
+	}
+}
+func Test_CheckBoards_row(t *testing.T) {
+	want := 1
+	input := [][5][5]bool{
+		{
+			{false, true, false, false, false},
+			{false, false, false, false, false},
+			{false, false, false, false, false},
+			{false, false, false, false, false},
+			{false, false, false, false, false},
+		},
+		{
+			{false, false, false, false, false},
+			{true, true, true, true, true},
+			{false, false, false, false, false},
+			{false, false, false, false, false},
+			{false, false, false, false, false},
+		},
+		{
+			{false, false, false, false, false},
+			{false, false, false, false, false},
+			{false, false, false, false, false},
+			{false, false, true, false, false},
+			{false, false, false, false, false},
+		},
+	}
+
+	if got := CheckBoards(&input); !reflect.DeepEqual(got, want) {
+		t.Errorf("CheckBoards() = %T(%v), want %T(%v)", got, got, want, want)
+	}
+}
+func Test_CheckBoards_col(t *testing.T) {
+	want := 0
+	input := [][5][5]bool{
+		{
+			{false, true, false, false, false},
+			{false, true, false, false, false},
+			{false, true, false, false, false},
+			{false, true, false, false, false},
+			{false, true, false, false, false},
+		},
+		{
+			{false, false, false, false, false},
+			{false, true, false, true, true},
+			{false, false, false, false, false},
+			{false, false, false, false, false},
+			{false, false, false, false, false},
+		},
+		{
+			{false, false, false, false, false},
+			{false, false, false, false, false},
+			{false, false, false, false, false},
+			{false, false, true, false, false},
+			{false, false, false, false, false},
+		},
+	}
+
+	if got := CheckBoards(&input); !reflect.DeepEqual(got, want) {
 		t.Errorf("CheckBoards() = %T(%v), want %T(%v)", got, got, want, want)
 	}
 }
