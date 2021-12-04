@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-// Convert binary to "gamma" and "epsilon" numbers
+// Find and score a winning bingo card
 func SolvePart1(input []string) int {
 	var winner int
 
@@ -20,26 +20,52 @@ func SolvePart1(input []string) int {
 	boards := ParseBoards(input[2:])
 
 	board_state := make([][5][5]bool, len(boards))
-	/* 	for i := range board_state {
-		for j := 0; j < 5; j++ {
-			board_state[i][j] = [5]bool{false, false, false, false, false}
-		}
-	} */
 
 	for _, number := range numbers {
 		MarkBoards(number, &boards, &board_state)
 		winner = CheckBoards(&board_state)
 		if winner > -1 {
-			break
+			score := ScoreBoard(&boards[winner], &board_state[winner])
+			last_num, _ := strconv.Atoi(number)
+			return score * last_num
 		}
 	}
 
 	return -1
 }
 
-//
+// Find and score the last winning bingo card
 func SolvePart2(input []string) int {
-	return -1
+	var winner, win_score int
+
+	numbers := ParseNumbers(input[0])
+	boards := ParseBoards(input[2:])
+	board_state := make([][5][5]bool, len(boards))
+
+	for _, number := range numbers {
+		MarkBoards(number, &boards, &board_state)
+		for {
+			winner = CheckBoards(&board_state)
+			if winner > -1 {
+				// Calculate and store winning score
+				score := ScoreBoard(&boards[winner], &board_state[winner])
+				num_i, _ := strconv.Atoi(number)
+				win_score = score * num_i
+
+				// Remove board and its state from the slices
+				boards[winner] = boards[len(boards)-1]
+				boards[len(boards)-1] = nil
+				boards = boards[:len(boards)-1]
+
+				board_state[winner] = board_state[len(board_state)-1]
+				board_state = board_state[:len(board_state)-1]
+			} else {
+				break
+			}
+		}
+	}
+
+	return win_score
 }
 
 func ParseNumbers(input string) (output []string) {
@@ -103,7 +129,7 @@ func CheckBoards(board_state *[][5][5]bool) int {
 	return -1
 }
 
-func ScoreBoard(board *[5][5]string, board_state *[5][5]bool) (score int) {
+func ScoreBoard(board *[][]string, board_state *[5][5]bool) (score int) {
 	for i, row := range *board_state {
 		for j, state := range row {
 			if !state {
@@ -117,7 +143,7 @@ func ScoreBoard(board *[5][5]string, board_state *[5][5]bool) (score int) {
 }
 
 func main() {
-	input := shared.ReadInputLines("day03/input")
+	input := shared.ReadInputLines("day04/input")
 	input = append(input, fmt.Sprintf("\n"))
 
 	fmt.Printf("Part 1: %v\n", SolvePart1(input))
