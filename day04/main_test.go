@@ -127,7 +127,7 @@ func Test_CheckBoards_row(t *testing.T) {
 		},
 	}
 
-	if got := CheckBoards(&input); !reflect.DeepEqual(got, want) {
+	if got := CheckBoards(&input, 0); !reflect.DeepEqual(got, want) {
 		t.Errorf("CheckBoards() = %T(%v), want %T(%v)", got, got, want, want)
 	}
 }
@@ -158,7 +158,7 @@ func Test_CheckBoards_col(t *testing.T) {
 		},
 	}
 
-	if got := CheckBoards(&input); !reflect.DeepEqual(got, want) {
+	if got := CheckBoards(&input, 0); !reflect.DeepEqual(got, want) {
 		t.Errorf("CheckBoards() = %T(%v), want %T(%v)", got, got, want, want)
 	}
 }
