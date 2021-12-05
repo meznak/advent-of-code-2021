@@ -1,6 +1,6 @@
 /*
-Advent of Code 2020 day 03
-Binary Diagnostic
+Advent of Code 2020 day 04
+Giant Squid
 */
 
 package main
@@ -23,7 +23,7 @@ func SolvePart1(input []string) int {
 
 	for _, number := range numbers {
 		MarkBoards(number, &boards, &board_state)
-		winner = CheckBoards(&board_state)
+		winner = CheckBoards(&board_state, winner)
 		if winner > -1 {
 			score := ScoreBoard(&boards[winner], &board_state[winner])
 			last_num, _ := strconv.Atoi(number)
@@ -45,7 +45,7 @@ func SolvePart2(input []string) int {
 	for _, number := range numbers {
 		MarkBoards(number, &boards, &board_state)
 		for {
-			winner = CheckBoards(&board_state)
+			winner = CheckBoards(&board_state, winner)
 			if winner > -1 {
 				// Calculate and store winning score
 				score := ScoreBoard(&boards[winner], &board_state[winner])
@@ -103,8 +103,11 @@ func MarkBoards(number string, boards *[][][]string, board_state *[][5][5]bool) 
 	}
 }
 
-func CheckBoards(board_state *[][5][5]bool) int {
-	for i, board := range *board_state {
+func CheckBoards(board_state *[][5][5]bool, start int) int {
+	if start < 0 {
+		start = 0
+	}
+	for i, board := range (*board_state)[start:] {
 		// Check rows
 		for _, row := range board {
 			if row == [5]bool{true, true, true, true, true} {
