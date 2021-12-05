@@ -28,8 +28,9 @@ func SolvePart1(input []string) int {
 	ApplyLines(&points, &lines)
 
 	// Count intersections
+	count := CountIntersections(&points)
 
-	return -1
+	return count
 }
 
 // ???
@@ -40,6 +41,7 @@ func SolvePart2(input []string) int {
 
 func ParseLines(input []string) (out [][]int) {
 	// 0,9 -> 5,9
+	// TODO: Refactor to use vectors
 	for _, line := range input {
 		if len(line) < 10 {
 			continue
@@ -70,28 +72,64 @@ func ApplyLines(points *map[Vector]int, lines *[][]int) {
 		// x1 y1 x2 y2
 		//  0  1  2  3
 
+		if line[0] != line[2] && line[1] != line[3] {
+			continue
+		}
+
+		x_diff := line[2] - line[0]
+		y_diff := line[3] - line[1]
+
+		var x_d, y_d int
+
 		switch {
-		case line[2] > line[0]: // right
+		case x_diff < 0:
+			x_d = -1
+		case x_diff == 0:
+			x_d = 0
+		case x_diff > 0:
+			x_d = 1
+		}
+
+		switch {
+		case y_diff < 0:
+			y_d = -1
+		case y_diff == 0:
+			y_d = 0
+		case y_diff > 0:
+			y_d = 1
+		}
+
+		x, y := line[0], line[1]
+		for {
+			AddPoint(points, Vector{x, y})
+			if x == line[2] && y == line[3] {
+				break
+			}
+			x += x_d
+			y += y_d
+		}
+
+		/*
+			MaybeSwapPoints(line)
+
 			for x := line[0]; x <= line[2]; x++ {
 				point := Vector{x, line[1]}
 				AddPoint(points, point)
 			}
-		case line[3] > line[1]: // down
-			for y := line[1]; y <= line[3]; y++ {
-				point := Vector{line[0], y}
-				AddPoint(points, point)
+
+			switch {
+			case line[3] > line[1]: // down
+				for y := line[1]; y <= line[3]; y++ {
+					point := Vector{line[0], y}
+					AddPoint(points, point)
+				}
+			case line[3] < line[1]: // up
+				for y := line[1]; y >= line[3]; y-- {
+					point := Vector{line[0], y}
+					AddPoint(points, point)
+				}
 			}
-		case line[2] < line[0]: // left
-			for x := line[0]; x >= line[2]; x-- {
-				point := Vector{x, line[1]}
-				AddPoint(points, point)
-			}
-		case line[3] < line[1]: // up
-			for y := line[1]; y >= line[3]; y-- {
-				point := Vector{line[0], y}
-				AddPoint(points, point)
-			}
-		}
+		*/
 	}
 }
 
@@ -101,6 +139,25 @@ func AddPoint(points *map[Vector]int, point Vector) {
 	}
 
 	(*points)[point]++
+}
+
+func MaybeSwapPoints(line []int) []int {
+	// Swap points if x2 < x1
+	if line[2] < line[0] {
+		return append(line[2:], line[:2]...)
+	}
+
+	return line
+}
+
+func CountIntersections(points *map[Vector]int) (count int) {
+	for _, point_count := range *points {
+		if point_count > 1 {
+			count++
+		}
+	}
+
+	return
 }
 
 func main() {

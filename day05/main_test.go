@@ -43,8 +43,8 @@ func Test_ParseLines(t *testing.T) {
 
 func Test_ApplyLines(t *testing.T) {
 	/*
-		1 1 2
-		. 1 1
+		1 1 3
+		. 2 1
 		1 2 .
 	*/
 	want := make(map[Vector]int, 4)
@@ -61,12 +61,35 @@ func Test_ApplyLines(t *testing.T) {
 		{2, 0, 2, 1},
 		{1, 2, 0, 2},
 		{1, 2, 1, 1},
+		{1, 1, 2, 0},
 	}
 
 	got := make(map[Vector]int, 0)
 
 	if ApplyLines(&got, &input); !reflect.DeepEqual(got, want) {
 		t.Errorf("ApplyLines() = %T(%v), want %T(%v)", got, got, want, want)
+	}
+}
+
+func Test_CountIntersections(t *testing.T) {
+	/*
+		1 1 2
+		. 1 1
+		1 2 .
+	*/
+	input := make(map[Vector]int, 4)
+	input[Vector{0, 0}] = 1
+	input[Vector{0, 2}] = 1
+	input[Vector{1, 0}] = 1
+	input[Vector{1, 1}] = 1
+	input[Vector{1, 2}] = 2
+	input[Vector{2, 1}] = 1
+	input[Vector{2, 0}] = 2
+
+	want := 2
+
+	if got := CountIntersections(&input); !reflect.DeepEqual(got, want) {
+		t.Errorf("CountIntersections() = %T(%v), want %T(%v)", got, got, want, want)
 	}
 }
 
