@@ -1,6 +1,6 @@
 /*
-Advent of Code 2020 day 03
-Binary Diagnostic
+Advent of Code 2020 day 05
+Hydrothermal Venture
 */
 
 package main
@@ -25,7 +25,7 @@ func SolvePart1(input []string) int {
 	lines := ParseLines(input)
 
 	// Apply lines
-	ApplyLines(&points, &lines)
+	ApplyLines(&points, &lines, true)
 
 	// Count intersections
 	count := CountIntersections(&points)
@@ -33,10 +33,20 @@ func SolvePart1(input []string) int {
 	return count
 }
 
-// ???
+// Same, considering diagnoal lines
 func SolvePart2(input []string) int {
+	points := make(map[Vector]int, 0)
 
-	return -1
+	// Parse lines
+	lines := ParseLines(input)
+
+	// Apply lines
+	ApplyLines(&points, &lines, false)
+
+	// Count intersections
+	count := CountIntersections(&points)
+
+	return count
 }
 
 func ParseLines(input []string) (out [][]int) {
@@ -67,12 +77,12 @@ func ParseLines(input []string) (out [][]int) {
 	return
 }
 
-func ApplyLines(points *map[Vector]int, lines *[][]int) {
+func ApplyLines(points *map[Vector]int, lines *[][]int, ignore_diag bool) {
 	for _, line := range *lines {
 		// x1 y1 x2 y2
 		//  0  1  2  3
 
-		if line[0] != line[2] && line[1] != line[3] {
+		if ignore_diag && line[0] != line[2] && line[1] != line[3] {
 			continue
 		}
 
@@ -108,28 +118,6 @@ func ApplyLines(points *map[Vector]int, lines *[][]int) {
 			x += x_d
 			y += y_d
 		}
-
-		/*
-			MaybeSwapPoints(line)
-
-			for x := line[0]; x <= line[2]; x++ {
-				point := Vector{x, line[1]}
-				AddPoint(points, point)
-			}
-
-			switch {
-			case line[3] > line[1]: // down
-				for y := line[1]; y <= line[3]; y++ {
-					point := Vector{line[0], y}
-					AddPoint(points, point)
-				}
-			case line[3] < line[1]: // up
-				for y := line[1]; y >= line[3]; y-- {
-					point := Vector{line[0], y}
-					AddPoint(points, point)
-				}
-			}
-		*/
 	}
 }
 
@@ -139,15 +127,6 @@ func AddPoint(points *map[Vector]int, point Vector) {
 	}
 
 	(*points)[point]++
-}
-
-func MaybeSwapPoints(line []int) []int {
-	// Swap points if x2 < x1
-	if line[2] < line[0] {
-		return append(line[2:], line[:2]...)
-	}
-
-	return line
 }
 
 func CountIntersections(points *map[Vector]int) (count int) {

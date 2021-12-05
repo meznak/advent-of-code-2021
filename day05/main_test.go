@@ -17,7 +17,7 @@ func Test_SolvePart1(t *testing.T) {
 }
 
 func Test_SolvePart2(t *testing.T) {
-	want := -1
+	want := 12
 
 	input := shared.ReadInputLines("sample1")
 
@@ -41,7 +41,7 @@ func Test_ParseLines(t *testing.T) {
 	}
 }
 
-func Test_ApplyLines(t *testing.T) {
+func Test_ApplyLines_no_diag(t *testing.T) {
 	/*
 		1 1 3
 		. 2 1
@@ -66,8 +66,38 @@ func Test_ApplyLines(t *testing.T) {
 
 	got := make(map[Vector]int, 0)
 
-	if ApplyLines(&got, &input); !reflect.DeepEqual(got, want) {
-		t.Errorf("ApplyLines() = %T(%v), want %T(%v)", got, got, want, want)
+	if ApplyLines(&got, &input, true); !reflect.DeepEqual(got, want) {
+		t.Errorf("ApplyLines(true) = %T(%v), want %T(%v)", got, got, want, want)
+	}
+}
+
+func Test_ApplyLines_yes_diag(t *testing.T) {
+	/*
+		1 1 3
+		. 2 1
+		1 2 .
+	*/
+	want := make(map[Vector]int, 4)
+	want[Vector{0, 0}] = 1
+	want[Vector{0, 2}] = 1
+	want[Vector{1, 0}] = 1
+	want[Vector{1, 1}] = 2
+	want[Vector{1, 2}] = 2
+	want[Vector{2, 0}] = 3
+	want[Vector{2, 1}] = 1
+
+	input := [][]int{
+		{0, 0, 2, 0},
+		{2, 0, 2, 1},
+		{1, 2, 0, 2},
+		{1, 2, 1, 1},
+		{1, 1, 2, 0},
+	}
+
+	got := make(map[Vector]int, 0)
+
+	if ApplyLines(&got, &input, false); !reflect.DeepEqual(got, want) {
+		t.Errorf("ApplyLines(false) = %T(%v), want %T(%v)", got, got, want, want)
 	}
 }
 
