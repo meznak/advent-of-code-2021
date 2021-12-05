@@ -41,6 +41,35 @@ func Test_ParseLines(t *testing.T) {
 	}
 }
 
+func Test_ApplyLines(t *testing.T) {
+	/*
+		1 1 2
+		. 1 1
+		1 2 .
+	*/
+	want := make(map[Vector]int, 4)
+	want[Vector{0, 0}] = 1
+	want[Vector{0, 2}] = 1
+	want[Vector{1, 0}] = 1
+	want[Vector{1, 1}] = 1
+	want[Vector{1, 2}] = 2
+	want[Vector{2, 0}] = 2
+	want[Vector{2, 1}] = 1
+
+	input := [][]int{
+		{0, 0, 2, 0},
+		{2, 0, 2, 1},
+		{1, 2, 0, 2},
+		{1, 2, 1, 1},
+	}
+
+	got := make(map[Vector]int, 0)
+
+	if ApplyLines(&got, &input); !reflect.DeepEqual(got, want) {
+		t.Errorf("ApplyLines() = %T(%v), want %T(%v)", got, got, want, want)
+	}
+}
+
 func Benchmark_SolvePart1(b *testing.B) {
 	input := shared.ReadInputLines("input")
 
