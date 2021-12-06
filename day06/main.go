@@ -8,20 +8,13 @@ package main
 import (
 	"aoc2021/shared"
 	"fmt"
-	"strconv"
-	"strings"
 )
 
 // Count exponentially spawning fish
 func SolvePart1(input []string) int {
 	// Parse list
-	var fishes []int
-	input_s := strings.Split(input[0], ",")
-	for _, v := range input_s {
-		fish, _ := strconv.Atoi(v)
-		fishes = append(fishes, fish)
-	}
-	grouped_fish := GroupFish(&fishes)
+	input_i := shared.CSVToInt(input[0])
+	grouped_fish := GroupFish(&input_i)
 
 	// Update list
 	for day := 0; day < 80; day++ {
@@ -40,13 +33,8 @@ func SolvePart1(input []string) int {
 // Same for 256 days
 func SolvePart2(input []string) int {
 	// Parse list
-	var fishes []int
-	input_s := strings.Split(input[0], ",")
-	for _, v := range input_s {
-		fish, _ := strconv.Atoi(v)
-		fishes = append(fishes, fish)
-	}
-	grouped_fish := GroupFish(&fishes)
+	input_i := shared.CSVToInt(input[0])
+	grouped_fish := GroupFish(&input_i)
 
 	// Update list
 	for day := 0; day < 256; day++ {
@@ -93,7 +81,6 @@ func ProcessDay(fishes *[]int) {
 
 func main() {
 	input := shared.ReadInputLines("day06/input")
-	input = append(input, fmt.Sprintf("\n"))
 
 	fmt.Printf("Part 1: %v\n", SolvePart1(input))
 	fmt.Printf("Part 2: %v\n", SolvePart2(input))
