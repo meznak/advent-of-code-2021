@@ -21,13 +21,20 @@ func SolvePart1(input []string) int {
 		fish, _ := strconv.Atoi(v)
 		fishes = append(fishes, fish)
 	}
+	grouped_fish := GroupFish(&fishes)
 
 	// Update list
 	for day := 0; day < 80; day++ {
-		ProcessDay(&fishes)
+		ProcessDay(&grouped_fish)
 	}
 
-	return len(fishes)
+	// Count fish
+	count := 0
+	for _, v := range grouped_fish {
+		count += v
+	}
+
+	return count
 }
 
 // Same for 256 days
@@ -35,24 +42,33 @@ func SolvePart2(input []string) int {
 	return -1
 }
 
-func ProcessDay(fishes *[]int) {
-	new_fish := 0
+func GroupFish(fishes *[]int) []int {
+	// Count fish by days remaining to simplify the slice
 
+	groups := make([]int, 9)
+
+	for _, v := range *fishes {
+		groups[v]++
+	}
+
+	return groups
+}
+
+func ProcessDay(fishes *[]int) {
 	// Decrease timers
+	new_fish := (*fishes)[0]
+
 	for i, v := range *fishes {
-		if v == 0 {
-			new_fish++
-			(*fishes)[i] = 6
-		} else {
-			(*fishes)[i]--
+		if i > 0 {
+			(*fishes)[i-1] = v
 		}
 	}
 
+	// Add new parents
+	(*fishes)[6] += new_fish
+
 	// Add new fish
-	for new_fish > 0 {
-		(*fishes) = append((*fishes), 8)
-		new_fish--
-	}
+	(*fishes)[8] = new_fish
 }
 
 func main() {

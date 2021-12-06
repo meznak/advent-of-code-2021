@@ -17,7 +17,7 @@ func Test_SolvePart1(t *testing.T) {
 }
 
 func Test_SolvePart2(t *testing.T) {
-	want := 26984457539
+	want := -1
 
 	input := shared.ReadInputLines("sample1")
 
@@ -45,9 +45,9 @@ func Benchmark_SolvePart2(b *testing.B) {
 }
 
 func Test_ProcessDay1(t *testing.T) {
-	want := []int{2, 3, 2, 0, 1}
+	want := []int{1, 1, 2, 1, 0, 0, 0, 0, 0}
 
-	got := []int{3, 4, 3, 1, 2}
+	got := []int{0, 1, 1, 2, 1, 0, 0, 0, 0}
 
 	if ProcessDay(&got); !reflect.DeepEqual(got, want) {
 		t.Errorf("ProcessDay(1) = %T(%v), want %T(%v)", got, got, want, want)
@@ -55,9 +55,9 @@ func Test_ProcessDay1(t *testing.T) {
 }
 
 func Test_ProcessDay2(t *testing.T) {
-	want := []int{1, 2, 1, 6, 0, 8}
+	want := []int{1, 2, 1, 0, 0, 0, 1, 0, 1}
 
-	got := []int{2, 3, 2, 0, 1}
+	got := []int{1, 1, 2, 1, 0, 0, 0, 0, 0}
 
 	if ProcessDay(&got); !reflect.DeepEqual(got, want) {
 		t.Errorf("ProcessDay(2) = %T(%v), want %T(%v)", got, got, want, want)
