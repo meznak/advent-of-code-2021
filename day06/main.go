@@ -39,7 +39,27 @@ func SolvePart1(input []string) int {
 
 // Same for 256 days
 func SolvePart2(input []string) int {
-	return -1
+	// Parse list
+	var fishes []int
+	input_s := strings.Split(input[0], ",")
+	for _, v := range input_s {
+		fish, _ := strconv.Atoi(v)
+		fishes = append(fishes, fish)
+	}
+	grouped_fish := GroupFish(&fishes)
+
+	// Update list
+	for day := 0; day < 256; day++ {
+		ProcessDay(&grouped_fish)
+	}
+
+	// Count fish
+	count := 0
+	for _, v := range grouped_fish {
+		count += v
+	}
+
+	return count
 }
 
 func GroupFish(fishes *[]int) []int {
