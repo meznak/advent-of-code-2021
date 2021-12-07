@@ -17,7 +17,7 @@ func Test_SolvePart1(t *testing.T) {
 }
 
 func Test_SolvePart2(t *testing.T) {
-	want := -1
+	want := []int{5, 168}
 
 	input := shared.ReadInputLines("sample1")
 
@@ -66,7 +66,7 @@ func TestAbsInt(t *testing.T) {
 	}
 }
 
-func TestCalculateFuel(t *testing.T) {
+func TestCalculateFuel_Part1(t *testing.T) {
 	type args struct {
 		crabs *[]int
 		fuel  *[][]int
@@ -92,7 +92,49 @@ func TestCalculateFuel(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			CalculateFuel(tt.args.crabs)
+			CalculateFuel_Part1(tt.args.crabs)
+		})
+	}
+}
+
+func TestCalculateFuel_Part2(t *testing.T) {
+	type args struct {
+		crabs *[]int
+	}
+	tests := []struct {
+		name string
+		args args
+		want [][]int
+	}{
+		{
+			name: "four",
+			args: args{
+				crabs: &[]int{3, 1, 2, 0},
+			},
+			want: [][]int{
+				{6, 3, 1, 0},
+				{1, 0, 1, 3},
+				{3, 1, 0, 1},
+				{0, 1, 3, 6},
+			},
+		},
+		{
+			name: "seven",
+			args: args{
+				crabs: &[]int{3, 1, 2, 0},
+			},
+			want: [][]int{
+				{6, 3, 1, 0},
+				{1, 0, 1, 3},
+				{3, 1, 0, 1},
+				{0, 1, 3, 6},
+			}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := CalculateFuel_Part2(tt.args.crabs); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("CalculateFuel_Part2() = %v, want %v", got, tt.want)
+			}
 		})
 	}
 }
@@ -107,7 +149,7 @@ func TestSumFuel(t *testing.T) {
 		want []int
 	}{
 		{
-			name: "sample",
+			name: "four",
 			args: args{
 				&[][]int{
 					{3, 2, 1, 0},
@@ -116,6 +158,17 @@ func TestSumFuel(t *testing.T) {
 					{0, 1, 2, 3}},
 			},
 			want: []int{6, 4, 4, 6},
+		},
+		{
+			name: "six",
+			args: args{
+				&[][]int{
+					{3, 2, 1, 0, 3, 5},
+					{1, 0, 1, 2, 1, 4},
+					{2, 1, 0, 1, 2, 7},
+					{0, 1, 2, 3, 0, 2}},
+			},
+			want: []int{6, 4, 4, 6, 6, 18},
 		},
 	}
 	for _, tt := range tests {
@@ -146,6 +199,35 @@ func TestMinFuel(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := MinFuel(tt.args.fuel); got != tt.want {
 				t.Errorf("MinFuel() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestMaxInt(t *testing.T) {
+	type args struct {
+		crabs *[]int
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "6",
+			args: args{&[]int{2, 4, 3, 6}},
+			want: 6,
+		},
+		{
+			name: "7",
+			args: args{&[]int{2, 7, 3, 6}},
+			want: 7,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := MaxInt(tt.args.crabs); got != tt.want {
+				t.Errorf("MaxInt() = %v, want %v", got, tt.want)
 			}
 		})
 	}
