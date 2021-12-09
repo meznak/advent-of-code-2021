@@ -48,10 +48,10 @@ func FindLowPoints(heights *[][]int) [][]bool {
 	row_length := len((*heights)[0])
 
 	for y, row := range *heights {
-		neighbors = []int{10, 10, 10, 10}
 		row_minima := make([]bool, row_length)
 
 		for x, val := range row {
+			neighbors = []int{10, 10, 10, 10}
 			// up
 			if y > 0 {
 				neighbors[0] = (*heights)[y-1][x]
@@ -74,10 +74,10 @@ func FindLowPoints(heights *[][]int) [][]bool {
 
 			_, neighbor_min := shared.MinInt(&neighbors)
 
-			if neighbor_min >= val {
-				row_minima[x] = true
-			} else {
+			if neighbor_min <= val {
 				row_minima[x] = false
+			} else {
+				row_minima[x] = true
 			}
 		}
 
