@@ -8,10 +8,11 @@ package main
 import (
 	"aoc2021/shared"
 	"fmt"
+	"sort"
 	"strconv"
 )
 
-//
+// Find local minimum depths
 func SolvePart1(input []string) int {
 	heights := ParseInput(&input)
 	minima := FindLowPoints(&heights)
@@ -20,9 +21,18 @@ func SolvePart1(input []string) int {
 	return risk
 }
 
-// ???
+// Find basins around local minima
 func SolvePart2(input []string) int {
-	return -1
+	heights := ParseInput(&input)
+	basins := FindBasins(&heights)
+
+	sort.Slice(basins, func(i, j int) bool { return basins[j] < basins[i] })
+	product := 1
+	for _, v := range basins[:3] {
+		product *= v
+	}
+
+	return product
 }
 
 func ParseInput(input *[]string) [][]int {
@@ -94,6 +104,62 @@ func CalcRisk(heights *[][]int, minima *[][]bool) (risk int) {
 				risk += (*heights)[y][x] + 1
 			}
 		}
+	}
+
+	return
+}
+
+func FindBasins(heights *[][]int) (basins []int) {
+	// build memo to track whether a point has been checked
+	visited := make([][]bool, len(*heights))
+	for y := range visited {
+		visited[y] = make([]bool, len((*heights)[0]))
+	}
+
+	for y, row := range *heights {
+		for x := range row {
+			if !visited[y][x] {
+				basin_size := WalkBasin(heights, &visited, y, x)
+				if basin_size > 0 {
+					basins = append(basins, basin_size)
+				}
+			}
+		}
+	}
+
+	return
+}
+
+func WalkBasin(heights *[][]int, visited *[][]bool, y, x int) (size int) {
+	was_visited := (*visited)[y][x]
+	(*visited)[y][x] = true
+
+	if (*heights)[y][x] == 9 || was_visited {
+		return 0
+	}
+
+	size += 1
+
+	// up
+	if y > 0 {
+		size += WalkBasin(heights, visited, y-1, x)
+	}
+
+	// right
+	if x < len((*heights)[0])-1 {
+		size += WalkBasin(heights, visited, y, x+1)
+	}
+
+	// down
+	if y < len(*heights)-1 {
+
+		size += WalkBasin(heights, visited, y+1, x)
+	}
+
+	// left
+	if x > 0 {
+
+		size += WalkBasin(heights, visited, y, x-1)
 	}
 
 	return
