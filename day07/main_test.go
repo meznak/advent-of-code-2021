@@ -44,28 +44,6 @@ func Benchmark_SolvePart2(b *testing.B) {
 	}
 }
 
-func TestAbsInt(t *testing.T) {
-	type args struct {
-		number int
-	}
-	tests := []struct {
-		name string
-		args args
-		want int
-	}{
-		{"1", args{1}, 1},
-		{"0", args{0}, 0},
-		{"-1", args{-1}, 1},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := AbsInt(tt.args.number); got != tt.want {
-				t.Errorf("AbsInt() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
 func TestCalculateFuel_Part1(t *testing.T) {
 	type args struct {
 		crabs *[]int
@@ -175,59 +153,6 @@ func TestSumFuel(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := SumFuel(tt.args.fuel); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("SumFuel() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestMinFuel(t *testing.T) {
-	type args struct {
-		fuel *[]int
-	}
-	tests := []struct {
-		name string
-		args args
-		want int
-	}{
-		{
-			name: "sample",
-			args: args{&[]int{6, 4, 3, 6}},
-			want: 2,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := MinFuel(tt.args.fuel); got != tt.want {
-				t.Errorf("MinFuel() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestMaxInt(t *testing.T) {
-	type args struct {
-		crabs *[]int
-	}
-	tests := []struct {
-		name string
-		args args
-		want int
-	}{
-		{
-			name: "6",
-			args: args{&[]int{2, 4, 3, 6}},
-			want: 6,
-		},
-		{
-			name: "7",
-			args: args{&[]int{2, 7, 3, 6}},
-			want: 7,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := MaxInt(tt.args.crabs); got != tt.want {
-				t.Errorf("MaxInt() = %v, want %v", got, tt.want)
 			}
 		})
 	}

@@ -8,7 +8,6 @@ package main
 import (
 	"aoc2021/shared"
 	"fmt"
-	"math"
 )
 
 // Calculate fuel to align crabs
@@ -18,9 +17,9 @@ func SolvePart1(input []string) []int {
 
 	total_fuel := SumFuel(&fuel)
 
-	best_position := MinFuel(&total_fuel)
+	best_position, best_fuel := shared.MinInt(&total_fuel)
 
-	return []int{best_position, total_fuel[best_position]}
+	return []int{best_position, best_fuel}
 }
 
 // Same with different fuel calculation
@@ -30,9 +29,9 @@ func SolvePart2(input []string) []int {
 
 	total_fuel := SumFuel(&fuel)
 
-	best_position := MinFuel(&total_fuel)
+	best_position, best_fuel := shared.MinInt(&total_fuel)
 
-	return []int{best_position, total_fuel[best_position]}
+	return []int{best_position, best_fuel}
 }
 
 // Calculate fuel from each crab to each position
@@ -43,7 +42,7 @@ func CalculateFuel_Part1(crabs *[]int) [][]int {
 	for i, crab_a := range *crabs {
 		fuel[i] = make([]int, num_positions)
 		for j, crab_b := range *crabs {
-			fuel[i][j] = AbsInt(crab_a - crab_b)
+			fuel[i][j] = shared.AbsInt(crab_a - crab_b)
 		}
 	}
 
@@ -53,7 +52,8 @@ func CalculateFuel_Part1(crabs *[]int) [][]int {
 // Calculate fuel from each crab to each position
 // Each step farther costs 1 more fuel per step
 func CalculateFuel_Part2(crabs *[]int) [][]int {
-	num_positions := MaxInt(crabs) + 1
+	_, num_positions := shared.MaxInt(crabs)
+	num_positions++
 	fuel := make([][]int, len(*crabs))
 	var prev_fuel, delta, new_fuel int
 
@@ -80,47 +80,14 @@ func CalculateFuel_Part2(crabs *[]int) [][]int {
 
 // Find total fuel to each position
 func SumFuel(fuel *[][]int) []int {
+	ch := make(chan int)
 	totals := make([]int, len((*fuel)[0]))
-	for j := range (*fuel)[0] {
-		// position
-		for i := range *fuel {
-			// crab
-			totals[j] += (*fuel)[i][j]
-		}
+	for col := range (*fuel)[0] {
+		go shared.SumVerticalInt(fuel, col, ch)
+		totals[col] = <-ch
 	}
 
 	return totals
-}
-
-func AbsInt(number int) int {
-	if number < 0 {
-		return -1 * number
-	}
-
-	return number
-}
-
-func MaxInt(numbers *[]int) int {
-	max := 0
-	for _, v := range *numbers {
-		if v > max {
-			max = v
-		}
-	}
-
-	return max
-}
-
-func MinFuel(fuel *[]int) int {
-	lowest_i := 0
-	lowest_v := int(math.MaxInt64)
-	for i, v := range *fuel {
-		if v < lowest_v {
-			lowest_i = i
-			lowest_v = v
-		}
-	}
-	return lowest_i
 }
 
 func main() {
