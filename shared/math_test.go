@@ -4,11 +4,6 @@ import (
 	"testing"
 )
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 860da4e (Add AbsInt, MinInt, MaxInt shared functions)
 func TestAbsInt(t *testing.T) {
 	type args struct {
 		number int
@@ -90,7 +85,6 @@ func TestMaxInt(t *testing.T) {
 		})
 	}
 }
-<<<<<<< HEAD
 
 func TestSumInt(t *testing.T) {
 	type args struct {
@@ -115,5 +109,3 @@ func TestSumInt(t *testing.T) {
 		})
 	}
 }
-=======
->>>>>>> 860da4e (Add AbsInt, MinInt, MaxInt shared functions)
