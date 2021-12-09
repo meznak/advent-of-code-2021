@@ -17,7 +17,7 @@ func Test_SolvePart1(t *testing.T) {
 }
 
 func Test_SolvePart2(t *testing.T) {
-	want := -1
+	want := 1134
 
 	input := shared.ReadInputLines("sample1")
 
@@ -184,6 +184,104 @@ func TestCalcRisk(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if gotRisk := CalcRisk(tt.args.heights, tt.args.minima); gotRisk != tt.wantRisk {
 				t.Errorf("CalcRisk() = %v, want %v", gotRisk, tt.wantRisk)
+			}
+		})
+	}
+}
+
+func TestFindBasins(t *testing.T) {
+	type args struct {
+		heights *[][]int
+	}
+	tests := []struct {
+		name       string
+		args       args
+		wantBasins []int
+	}{
+		{
+			name: "small",
+			args: args{
+				&[][]int{
+					{2, 1, 9, 9, 9, 4, 3, 2, 1, 0},
+					{3, 9, 8, 7, 8, 9, 4, 9, 2, 1},
+					{9, 8, 5, 6, 7, 8, 9, 8, 9, 2},
+					{8, 7, 6, 7, 8, 9, 6, 7, 8, 9},
+					{9, 8, 9, 9, 9, 6, 5, 6, 7, 8},
+				},
+			},
+			wantBasins: []int{3, 9, 14, 9},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if gotBasins := FindBasins(tt.args.heights); !reflect.DeepEqual(gotBasins, tt.wantBasins) {
+				t.Errorf("FindBasins() = %v, want %v", gotBasins, tt.wantBasins)
+			}
+		})
+	}
+}
+
+func TestWalkBasin(t *testing.T) {
+	type args struct {
+		heights *[][]int
+		visited *[][]bool
+		y       int
+		x       int
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantSize int
+	}{
+		{
+			name: "small",
+			args: args{
+				&[][]int{
+					{2, 1, 9, 9, 9, 4, 3, 2, 1, 0},
+					{3, 9, 8, 7, 8, 9, 4, 9, 2, 1},
+					{9, 8, 5, 6, 7, 8, 9, 8, 9, 2},
+					{8, 7, 6, 7, 8, 9, 6, 7, 8, 9},
+					{9, 8, 9, 9, 9, 6, 5, 6, 7, 8},
+				},
+				&[][]bool{
+					{false, false, false, false, false, false, false, false, false, false},
+					{false, false, false, false, false, false, false, false, false, false},
+					{false, false, false, false, false, false, false, false, false, false},
+					{false, false, false, false, false, false, false, false, false, false},
+					{false, false, false, false, false, false, false, false, false, false},
+				},
+				0,
+				0,
+			},
+			wantSize: 3,
+		},
+		{
+			name: "large",
+			args: args{
+				&[][]int{
+					{2, 1, 9, 9, 9, 4, 3, 2, 1, 0},
+					{3, 9, 8, 7, 8, 9, 4, 9, 2, 1},
+					{9, 8, 5, 6, 7, 8, 9, 8, 9, 2},
+					{8, 7, 6, 7, 8, 9, 6, 7, 8, 9},
+					{9, 8, 9, 9, 9, 6, 5, 6, 7, 8},
+				},
+				&[][]bool{
+					{false, false, false, false, false, false, false, false, false, false},
+					{false, false, false, false, false, false, false, false, false, false},
+					{false, false, false, false, false, false, false, false, false, false},
+					{false, false, false, false, false, false, false, false, false, false},
+					{false, false, false, false, false, false, false, false, false, false},
+				},
+				3,
+				2,
+			},
+			wantSize: 14,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if gotSize := WalkBasin(tt.args.heights, tt.args.visited, tt.args.y, tt.args.x); gotSize != tt.wantSize {
+				t.Errorf("WalkBasin() = %v, want %v", gotSize, tt.wantSize)
 			}
 		})
 	}
