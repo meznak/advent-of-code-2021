@@ -4,8 +4,6 @@ import (
 	"testing"
 )
 
-
-
 func TestAbsInt(t *testing.T) {
 	type args struct {
 		number int
@@ -83,6 +81,30 @@ func TestMaxInt(t *testing.T) {
 			}
 			if got1 != tt.want1 {
 				t.Errorf("MaxInt() got1 = %v, want %v", got1, tt.want1)
+			}
+		})
+	}
+}
+
+func TestSumInt(t *testing.T) {
+	type args struct {
+		nums *[]int
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantSum int
+	}{
+		{
+			name:    "4",
+			args:    args{&[]int{1, 2, 3, 4}},
+			wantSum: 10,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if gotSum := SumInt(tt.args.nums); gotSum != tt.wantSum {
+				t.Errorf("SumInt() = %v, want %v", gotSum, tt.wantSum)
 			}
 		})
 	}

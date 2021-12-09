@@ -35,3 +35,11 @@ func MaxInt(nums *[]int) (int, int) {
 
 	return pos, max
 }
+
+func SumInt(nums *[]int) (sum int) {
+	for _, v := range *nums {
+		sum += v
+	}
+
+	return
+}
