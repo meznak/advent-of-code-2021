@@ -55,9 +55,48 @@ func SolvePart1(input []string) int {
 	return flash_count
 }
 
-// ???
+// Find first total flash
 func SolvePart2(input []string) int {
-	return -1
+	octos := ParseInput(&input)
+	octo_count := len(octos) * len(octos[0])
+	rows := len(octos)
+	cols := len(octos[0])
+	var changed bool
+
+	for step := 0; ; step++ {
+		// Grid to track flashes
+		flashed := make([][]bool, rows)
+		flash_count = 0
+
+		for y := range octos {
+			flashed[y] = make([]bool, cols)
+		}
+
+		for y, row := range octos {
+			for x := range row {
+				if !flashed[y][x] {
+					octos[y][x]++
+				}
+			}
+		}
+
+		changed = true
+		for changed {
+			changed = false
+			for y, row := range octos {
+				for x, octo := range row {
+					if octo > 9 {
+						changed = true
+						Flash(&octos, &flashed, y, x)
+					}
+				}
+			}
+		}
+
+		if flash_count == octo_count {
+			return step + 1
+		}
+	}
 }
 
 func ParseInput(input *[]string) [][]int {
